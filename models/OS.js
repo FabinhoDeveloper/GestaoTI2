@@ -1,5 +1,6 @@
 const {DataTypes} = require("sequelize");
 const sequelize = require("../config/database");
+const Usuario = require("./Usuario");
 
 const OS = sequelize.define('OS', {
     descricao: {
@@ -24,5 +25,6 @@ const OS = sequelize.define('OS', {
     tableName: 'os',
     timestamps: false
 })
+
 
 module.exports = OS

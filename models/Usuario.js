@@ -1,5 +1,6 @@
 const {DataTypes} = require("sequelize");
 const sequelize = require("../config/database");
+const OS = require("./OS");
 
 const Usuario = sequelize.define('Usuario', {
     nome: {
@@ -19,6 +20,10 @@ const Usuario = sequelize.define('Usuario', {
         type: DataTypes.ENUM("ADMINISTRADOR", "TECNICO", "PADRAO"),
         allowNull: false
 
+    },
+    local_de_trabalho: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize,
@@ -26,5 +31,6 @@ const Usuario = sequelize.define('Usuario', {
     tableName: 'usuario',
     timestamps: false
 })
+
 
 module.exports = Usuario
