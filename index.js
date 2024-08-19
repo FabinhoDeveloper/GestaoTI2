@@ -7,9 +7,9 @@ const app = express();
 const usuarioRoutes = require("./routes/usuarioRoutes")
 const osRoutes = require("./routes/osRoutes")
 
-
 const PORT = process.env.PORT;
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
 })
 
 app.use("/usuario", usuarioRoutes)
-
 
 sync().then(() => {
     app.listen(PORT, () => {

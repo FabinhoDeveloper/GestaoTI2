@@ -8,7 +8,7 @@ router.get("/listar/:id", usuarioControllers.listarUsuarioPorId)
 
 router.post("/listar-tipo", usuarioControllers.listarUsuariosPorTipo)
 
-router.post("/cadastrar/", usuarioControllers.cadastrarUsuario)
+router.post("/cadastrar", usuarioControllers.cadastrarUsuario)
 
 router.delete("/deletar/:id", usuarioControllers.deletarUsuario)
 
