@@ -1,0 +1,15 @@
+TELAS 
+
+- login
+
+- todas as OS (TECNICO e ADMINISTRADOR)
+	- Vizualizar OS
+	- Editar OS (Administrador)
+	- Atribuir (ADMINISTRADOR)
+
+- OS feitas pelo usuário (USUARIO PADRAO)
+	- Vizualizar OS
+
+- OS atribuidas (TECNICO E ADMINISTRADOR)
+	- Vizualizar OS
+	- Concluir OS
