@@ -3,84 +3,135 @@ const Usuario = require("../models/Usuario");
 
 module.exports = {
     async cadastrarOS(dados) {
-        
+        try {
+            const {descricao, idUsuario} = dados
+            /**
+                descricao: vem do formulario
+                status: PENDENTE
+                data_de_criacao: DATA DE HOJE
+                data_fechamento: NULL
+                usuario_id: SESSION
+                tecnico_id: NULL
+             */
+
+            const osCriada = await OS.create({
+                descricao,
+                status: "PENDENTE",
+                data_criacao: new Date(),
+                usuarioId: idUsuario
+            })
+
+            return osCriada
+
+        } catch (error) {
+            console.error("Erro ao cadastrar OS:", error.message);
+            throw error;
+        }
     },
 
     async listarOs() {
-        const listaOs = await OS.findAll()
+        try {
+            const listaOs = await OS.findAll();
 
-        if (listaOs.length === 0) {
-            throw new Error("Nenhuma OS encontrada!")
+            if (listaOs.length === 0) {
+                throw new Error("Nenhuma OS encontrada!");
+            }
+
+            return listaOs;
+        } catch (error) {
+            console.error("Erro ao listar OS:", error.message);
+            throw error;
         }
-
-        return listaOs
     },
 
     async obterOsPorUsuario(dados) {
-        const {id} = dados
+        try {
+            const { id } = dados;
 
-        const os = await OS.findAll({
-            where: {id}
-        })
+            const os = await OS.findAll({
+                where: { id }
+            });
 
-        if (os.length === 0) {
-            throw new Error("Nenhuma OS atribuída a esse usuário!")
+            if (os.length === 0) {
+                throw new Error("Nenhuma OS atribuída a esse usuário!");
+            }
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao obter OS por usuário:", error.message);
+            throw error;
         }
-
-        return os
     },
 
     async obterOsPorAtribuicao(dados) {
-        const {idUsuario} = dados
+        try {
+            const { idUsuario } = dados;
 
-        const os = await OS.findAll({
-            where: {usuarioId: idUsuario}
-        })
+            const os = await OS.findAll({
+                where: { usuarioId: idUsuario }
+            });
 
-        
+            if (os.length === 0) {
+                throw new Error("Nenhuma OS atribuída a este usuário");
+            }
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao obter OS por atribuição:", error.message);
+            throw error;
+        }
     },
 
     async atribuirOs(dados) {
-        const {idOs, idUsuario} = dados
+        try {
+            const { idOs, idUsuario } = dados;
 
-        const os = await OS.findByPk(idOs)
-        const usuario = await Usuario.findByPk(idUsuario)
+            const os = await OS.findByPk(idOs);
+            const usuario = await Usuario.findByPk(idUsuario);
 
-        if (!os) {
-            throw new Error("Nenhuma OS encontrada com este ID!")
+            if (!os) {
+                throw new Error("Nenhuma OS encontrada com este ID!");
+            }
+
+            if (!usuario) {
+                throw new Error("Nenhum usuário encontrado com este ID!");
+            }
+
+            if (usuario.tipo === "PADRAO") {
+                throw new Error("Um usuário padrão não pode ter uma OS atribuída!");
+            }
+
+            os.tecnicoId = usuario.idUsuario;
+            await os.save();
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao atribuir OS:", error.message);
+            throw error;
         }
-        
-        if (!usuario) {
-            throw new Error("Nenhum usuário encontrado com este ID!")
-        }
-
-        if (usuario.tipo === "PADRAO") {
-            throw new Error("Um usuário padrão não pode ter uma OS atribuída!")
-        }
-
-        os.tecnicoId = usuario.idUsuario
-        await os.save()
-
-        return os
     },
 
     async concluirOs(dados) {
-        const {idOs} = dados
+        try {
+            const { idOs } = dados;
 
-        const os = await OS.findByPk(idOs)
+            const os = await OS.findByPk(idOs);
 
-        if (!os) {
-            throw new Error("Nenhuma OS encontrada com este ID!")
+            if (!os) {
+                throw new Error("Nenhuma OS encontrada com este ID!");
+            }
+
+            if (os.status === "CONCLUÍDA" || os.status === "CANCELADA") {
+                throw new Error("Essa OS não está pendente! Não pôde ser concluída!");
+            }
+
+            os.status = "CONCLUÍDA";
+            await os.save();
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao concluir OS:", error.message);
+            throw error;
         }
-
-        if (os.status === "CONCLUÍDA" || os.status === "CANCELADA") {
-            throw new Error("Essa OS não está pendente! Não pôde ser concluída!")
-        }
-
-        os.status = "CONCLUÍDA"
-
-        await os.save()
-
-        return os
     }
-}
+};
