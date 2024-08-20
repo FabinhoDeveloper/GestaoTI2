@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/usuario", usuarioRoutes)
+app.use("/os", osRoutes)
 
 sync().then(() => {
     app.listen(PORT, () => {
