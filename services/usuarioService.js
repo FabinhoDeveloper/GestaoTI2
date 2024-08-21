@@ -40,7 +40,24 @@ module.exports = {
 
             return usuario
         } catch (error) {
-            console.error("Erro ao bbuscar usuário por ID", error)
+            console.error("Erro ao buscar usuário por ID", error)
+            throw error
+        }
+    },
+
+    async listarUsuarioPorEmail(email) {
+        try {
+            const usuario = await Usuario.findOne({
+                where: {email}
+            });
+
+            if (!usuario) {
+                throw new Error("Usuário não encontrado!")
+            }
+
+            return usuario
+        } catch (error) {
+            console.error("Erro ao buscar usuário por E-mail", error)
             throw error
         }
     },

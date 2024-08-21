@@ -61,6 +61,18 @@ module.exports = {
         }
     },
 
+    async listarUsuarioPorEmail(req, res) {
+        try {
+            const {email} = req.params
+
+            const usuario = await usuarioServices.listarUsuarioPorEmail(email)
+            res.json(usuario)
+
+        } catch (error) {
+            res.status(500).json({mensagem: error.message})
+        }
+    },
+
     async listarUsuariosPorTipo(req, res) {
         try {
             const {tipo} = req.body

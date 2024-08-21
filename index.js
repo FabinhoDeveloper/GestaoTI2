@@ -1,5 +1,6 @@
 require('dotenv').config();
 const sync = require("./config/db_sync")
+const session = require('express-session');
 
 const express = require("express");
 const app = express();
@@ -11,6 +12,13 @@ const PORT = process.env.PORT;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(session({
+  secret: 'segredo-super-seguro',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false}
+}));
 
 app.get("/", (req, res) => {
     res.json({message: "Bem vindo ao sistema Gestão TI!"})

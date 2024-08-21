@@ -3,8 +3,9 @@ const osService = require("../services/osService")
 
 module.exports = {
     async cadastrarOs (req, res) {
-        const {descricao} = req.body
-        const idUsuario = req.session.idUsuario
+        const {descricao, id} = req.body
+        
+        console.log([descricao, id])
 
         try {
             if (!descricao) {
@@ -12,11 +13,14 @@ module.exports = {
             }
     
             // Verificar se o idUsuario está presente na sessão
-            if (!idUsuario) {
+            if (!id) {
                 return res.status(400).json({ mensagem: "Usuário não autenticado!" });
             }
 
-            const osCriada = await osService.cadastrarOS(descricao, idUsuario)
+            const osCriada = await osService.cadastrarOS({
+                descricao, 
+                id
+            })
             
             res.status(201).json({
                 mensagem: "OS cadastrada com sucesso!",
@@ -24,6 +28,7 @@ module.exports = {
             })
 
         } catch (error) {
+            console.error("Erro ao cadastrar OS: ", error.message)
             res.status(500).json({mensagem: error.message})            
         }
     }

@@ -4,21 +4,13 @@ const Usuario = require("../models/Usuario");
 module.exports = {
     async cadastrarOS(dados) {
         try {
-            const {descricao, idUsuario} = dados
-            /**
-                descricao: vem do formulario
-                status: PENDENTE
-                data_de_criacao: DATA DE HOJE
-                data_fechamento: NULL
-                usuario_id: SESSION
-                tecnico_id: NULL
-             */
+            const {descricao, id} = dados
 
             const osCriada = await OS.create({
-                descricao,
+                descricao: descricao,
                 status: "PENDENTE",
                 data_criacao: new Date(),
-                usuarioId: idUsuario
+                usuarioId: id
             })
 
             return osCriada

@@ -6,6 +6,8 @@ router.get("/listar", usuarioControllers.listarUsuarios)
 
 router.get("/listar/:id", usuarioControllers.listarUsuarioPorId)
 
+router.get("/listar/email/:email", usuarioControllers.listarUsuarioPorEmail)
+
 router.post("/listar-tipo", usuarioControllers.listarUsuariosPorTipo)
 
 router.post("/cadastrar", usuarioControllers.cadastrarUsuario)
