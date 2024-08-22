@@ -8,7 +8,7 @@ module.exports = {
 
             const osCriada = await OS.create({
                 descricao: descricao,
-                status: "PENDENTE",
+                status_os: "PENDENTE",
                 data_criacao: new Date(),
                 usuarioId: id
             })
@@ -39,21 +39,18 @@ module.exports = {
     async obterOsPorUsuario(dados) {
         try {
             const { id } = dados;
-
-            const os = await OS.findAll({
-                where: { id }
+    
+            const listaOs = await OS.findAll({
+                where: { usuarioId: id }
             });
-
-            if (os.length === 0) {
-                throw new Error("Nenhuma OS atribuída a esse usuário!");
-            }
-
-            return os;
+    
+            return listaOs; // Retorna a lista, mesmo que esteja vazia
         } catch (error) {
             console.error("Erro ao obter OS por usuário:", error.message);
             throw error;
         }
     },
+    
 
     async obterOsPorAtribuicao(dados) {
         try {

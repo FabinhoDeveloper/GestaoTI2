@@ -5,8 +5,6 @@ module.exports = {
     async cadastrarOs (req, res) {
         const {descricao, id} = req.body
         
-        console.log([descricao, id])
-
         try {
             if (!descricao) {
                 return res.status(400).json({ mensagem: "A descrição é obrigatória!" });
@@ -30,6 +28,38 @@ module.exports = {
         } catch (error) {
             console.error("Erro ao cadastrar OS: ", error.message)
             res.status(500).json({mensagem: error.message})            
+        }
+    },
+
+    async listarOs(req, res) {
+        try {
+            const listaOs = await osService.listarOs()
+
+            if (listaOs.length === 0) {
+                return res.status(404).json({ mensagem: "Nenhuma OS encontrada." });
+            }
+
+            res.json(listaOs)
+
+        } catch (error) {
+            res.status(500).json({mensagem: error.message})
+        }
+    },
+
+    async listarOsPorId(req, res) {
+        const {id} = req.params
+        
+        try {            
+            const listaOs = await osService.obterOsPorUsuario({id})
+
+            if (listaOs.length === 0) {
+                return res.status(404).json({mensagem: "Nenhuma OS cadastrar por este usuário."})
+            }
+
+            res.json(listaOs)
+
+        } catch (error) {
+            res.status(500).json({mensagem: error.message})
         }
     }
 }

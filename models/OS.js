@@ -7,7 +7,7 @@ const OS = sequelize.define('OS', {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      status: {
+      status_os: {
         type: DataTypes.ENUM('PENDENTE', 'CONCLUÍDA', 'CANCELADA'),
         allowNull: false
       },

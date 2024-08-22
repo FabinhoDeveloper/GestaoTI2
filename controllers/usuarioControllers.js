@@ -40,8 +40,8 @@ module.exports = {
             const usuarios = await usuarioServices.listarUsuarios()
 
              if (usuarios.length === 0) {
-            return res.status(404).json({ mensagem: "Nenhum usuário encontrado." });
-        }
+                return res.status(404).json({ mensagem: "Nenhum usuário encontrado." });
+            }
 
             res.json(usuarios)
         } catch (error) {
