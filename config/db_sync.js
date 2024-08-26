@@ -10,26 +10,27 @@ Usuario.hasMany(OS, {
     as: 'os_registradas'
   });
   
-  OS.belongsTo(Usuario, {
-    foreignKey: {
-      name: 'usuarioId',
-      allowNull: false
-    },
-    as: 'usuario'
-  });
-  
-  Usuario.hasMany(OS, {
-    foreignKey: 'tecnicoId',
-    as: 'os_atribuidas'
-  });
-  
-  OS.belongsTo(Usuario, {
-    foreignKey: {
-      name: 'tecnicoId',
-      allowNull: true
-    },
-    as: 'tecnico'
-  });
+OS.belongsTo(Usuario, {
+  foreignKey: {
+    name: 'usuarioId',
+    allowNull: false
+  },
+  as: 'usuario'
+});
+
+Usuario.hasMany(OS, {
+  foreignKey: 'tecnicoId',
+  as: 'os_atribuidas'
+});
+
+OS.belongsTo(Usuario, {
+  foreignKey: {
+    name: 'tecnicoId',
+    allowNull: true
+  },
+  as: 'tecnico'
+});
+
 const sync = async () => {
     try {
         await sequelize.sync({force: mudarBanco})

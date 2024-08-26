@@ -4,13 +4,14 @@ const Usuario = require("../models/Usuario");
 module.exports = {
     async cadastrarOS(dados) {
         try {
-            const {descricao, id} = dados
+            const {descricao, id, tecnicoId} = dados
 
             const osCriada = await OS.create({
                 descricao: descricao,
                 status_os: "PENDENTE",
                 data_criacao: new Date(),
-                usuarioId: id
+                usuarioId: id,
+                tecnicoId
             })
 
             return osCriada
@@ -23,13 +24,27 @@ module.exports = {
 
     async listarOs() {
         try {
-            const listaOs = await OS.findAll();
+            const listaOs = await OS.findAll({
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'usuario', // Alias para o requerente
+                        attributes: ['nome']
+                    },
+                    {
+                        model: Usuario,
+                        as: 'tecnico', // Alias para o técnico
+                        attributes: ['nome']
+                    }
+                ]
+            });
 
             if (listaOs.length === 0) {
                 throw new Error("Nenhuma OS encontrada!");
             }
 
             return listaOs;
+
         } catch (error) {
             console.error("Erro ao listar OS:", error.message);
             throw error;
@@ -41,7 +56,19 @@ module.exports = {
             const { id } = dados;
     
             const listaOs = await OS.findAll({
-                where: { usuarioId: id }
+                where: { usuarioId: id },
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'usuario', // Alias para o requerente
+                        attributes: ['nome']
+                    },
+                    {
+                        model: Usuario,
+                        as: 'tecnico', // Alias para o técnico
+                        attributes: ['nome']
+                    }
+                ]
             });
     
             return listaOs; // Retorna a lista, mesmo que esteja vazia
@@ -54,17 +81,32 @@ module.exports = {
 
     async obterOsPorAtribuicao(dados) {
         try {
-            const { idUsuario } = dados;
+            const { id } = dados;
 
-            const os = await OS.findAll({
-                where: { usuarioId: idUsuario }
+            console.log("Dados recebidos:", dados); // Adicione este log
+
+            const listaOs = await OS.findAll({
+                where: { tecnicoId: id },
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'usuario', // Alias para o requerente
+                        attributes: ['nome']
+                    },
+                    {
+                        model: Usuario,
+                        as: 'tecnico', // Alias para o técnico
+                        attributes: ['nome']
+                    }
+                ]
             });
 
-            if (os.length === 0) {
+            if (listaOs.length === 0) {
                 throw new Error("Nenhuma OS atribuída a este usuário");
             }
 
-            return os;
+            return listaOs;
+
         } catch (error) {
             console.error("Erro ao obter OS por atribuição:", error.message);
             throw error;
@@ -110,11 +152,13 @@ module.exports = {
                 throw new Error("Nenhuma OS encontrada com este ID!");
             }
 
-            if (os.status === "CONCLUÍDA" || os.status === "CANCELADA") {
+            if (os.status_os === "CONCLUÍDA" || os.status_os === "CANCELADA") {
                 throw new Error("Essa OS não está pendente! Não pôde ser concluída!");
             }
-
-            os.status = "CONCLUÍDA";
+            
+            os.status_os = "CONCLUÍDA"
+            os.data_fechamento = new Date()
+            
             await os.save();
 
             return os;

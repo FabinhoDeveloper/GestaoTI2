@@ -3,7 +3,7 @@ const osService = require("../services/osService")
 
 module.exports = {
     async cadastrarOs (req, res) {
-        const {descricao, id} = req.body
+        const {descricao, id, tecnicoId} = req.body
         
         try {
             if (!descricao) {
@@ -17,7 +17,8 @@ module.exports = {
 
             const osCriada = await osService.cadastrarOS({
                 descricao, 
-                id
+                id,
+                tecnicoId
             })
             
             res.status(201).json({
@@ -46,14 +47,14 @@ module.exports = {
         }
     },
 
-    async listarOsPorId(req, res) {
+    async listarOsPorUsuario(req, res) {
         const {id} = req.params
         
         try {            
             const listaOs = await osService.obterOsPorUsuario({id})
 
             if (listaOs.length === 0) {
-                return res.status(404).json({mensagem: "Nenhuma OS cadastrar por este usuário."})
+                return res.status(404).json({mensagem: "Nenhuma OS cadastrada por este usuário."})
             }
 
             res.json(listaOs)
@@ -61,16 +62,42 @@ module.exports = {
         } catch (error) {
             res.status(500).json({mensagem: error.message})
         }
+    },
+
+    async listarOsPorAtribuicao(req, res) {
+        const {id} = req.params
+
+        try {
+            const listaOs = await osService.obterOsPorAtribuicao({id})
+
+            if (listaOs.length === 0) {
+                return res.status(404).json({mensagem: "Nenhuma OS atribuída por este usuário."})
+            }
+            
+            res.json(listaOs)
+
+        } catch (error) {
+            res.status(500).json({mensagem: error.message})
+        }
+    },
+
+    async concluirOs(req, res) {
+        const {id} = req.body
+
+        try {
+            const osConcluida = await osService.concluirOs(id)
+
+            if (!osConcluida) {
+                return res.status(404).json({mensagem: "Nenhuma OS encontrada com esse ID!"})
+            }
+
+            res.json({
+                mensagem: "OS concluída com sucesso!",
+                os: osConcluida
+            })
+        } catch (error) {
+            
+        }
     }
 }
  
- 
- /**
-                descricao: vem do formulario
-                status: PENDENTE
-                data_de_criacao: DATA DE HOJE
-                data_fechamento: NULL
-                usuario_id: SESSION
-                tecnico_id: NULL
-             */
-
