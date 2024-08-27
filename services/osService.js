@@ -38,13 +38,9 @@ module.exports = {
                     }
                 ]
             });
-
-            if (listaOs.length === 0) {
-                throw new Error("Nenhuma OS encontrada!");
-            }
-
-            return listaOs;
-
+    
+            return listaOs.length > 0 ? listaOs : [];
+    
         } catch (error) {
             console.error("Erro ao listar OS:", error.message);
             throw error;
@@ -113,6 +109,23 @@ module.exports = {
         }
     },
 
+    async obterOsPorId(dados) {
+        try {
+            const {id} = dados
+
+            const os = await OS.findByPk(id)
+
+            if (!os) {
+                throw new Error("Nenhuma OS encontrada com este ID!");
+            }
+
+            return os
+        } catch (error) {
+            console.error("Erro ao buscar OS por Id:", error.message);
+            throw error;
+        }
+    },
+
     async atribuirOs(dados) {
         try {
             const { idOs, idUsuario } = dados;
@@ -132,7 +145,7 @@ module.exports = {
                 throw new Error("Um usuário padrão não pode ter uma OS atribuída!");
             }
 
-            os.tecnicoId = usuario.idUsuario;
+            os.tecnicoId = usuario.id;
             await os.save();
 
             return os;
@@ -144,9 +157,9 @@ module.exports = {
 
     async concluirOs(dados) {
         try {
-            const { idOs } = dados;
+            const { id } = dados;
 
-            const os = await OS.findByPk(idOs);
+            const os = await OS.findByPk(id);
 
             if (!os) {
                 throw new Error("Nenhuma OS encontrada com este ID!");
@@ -164,6 +177,32 @@ module.exports = {
             return os;
         } catch (error) {
             console.error("Erro ao concluir OS:", error.message);
+            throw error;
+        }
+    },
+
+    async cancelarOs(dados) {
+        try {
+            const { id } = dados;
+
+            const os = await OS.findByPk(id);
+
+            if (!os) {
+                throw new Error("Nenhuma OS encontrada com este ID!");
+            }
+
+            if (os.status_os === "CONCLUÍDA" || os.status_os === "CANCELADA") {
+                throw new Error("Essa OS não está pendente! Não pôde ser cancelada!");
+            }
+            
+            os.status_os = "CANCELADA"
+            os.data_fechamento = new Date()
+            
+            await os.save();
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao cancelar OS:", error.message);
             throw error;
         }
     }

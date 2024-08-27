@@ -4,12 +4,18 @@ const osControllers = require("../controllers/osControllers")
 
 router.get("/listar", osControllers.listarOs)
 
-router.get("/listar/:id", osControllers.listarOsPorUsuario)
+router.get("/listar-por-usuario/:id", osControllers.listarOsPorUsuario)
+
+router.get("/listar/:id", osControllers.listarOsPorId)
 
 router.get("/atribuicao/:id", osControllers.listarOsPorAtribuicao)
 
 router.post("/cadastrar", osControllers.cadastrarOs)
 
-router.delete("/concluir", osControllers.concluirOs)
+router.post("/concluir/:id", osControllers.concluirOs)
+
+router.post("/cancelar/:id", osControllers.cancelarOs)
+
+router.post("/atribuir/:idOs", osControllers.atribuirOs)
 
 module.exports = router
