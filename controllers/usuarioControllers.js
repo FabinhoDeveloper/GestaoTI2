@@ -25,7 +25,7 @@ module.exports = {
         const {id} = req.params
 
         try {
-            const usuarioDeletado = await usuarioServices.deletarUsuario(id)
+            const usuarioDeletado = await usuarioServices.deletarUsuario({id})
             res.json({
                 mensagem: `Usuário deletado com sucesso!`, 
                 deletado: usuarioDeletado

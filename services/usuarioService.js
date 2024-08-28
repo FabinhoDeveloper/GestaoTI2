@@ -86,7 +86,8 @@ module.exports = {
         }
     },
 
-    async deletarUsuario(id) {
+    async deletarUsuario(dados) {
+        const {id} = dados
         try {
             const usuarioDeletado = await Usuario.destroy({
                 where: {id}

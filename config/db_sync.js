@@ -3,8 +3,6 @@ const sequelize = require('./database');
 const Usuario = require("../models/Usuario")
 const OS = require("../models/OS")
 
-let mudarBanco = false;
-
 Usuario.hasMany(OS, {
     foreignKey: 'usuarioId',
     as: 'os_registradas'
@@ -33,7 +31,7 @@ OS.belongsTo(Usuario, {
 
 const sync = async () => {
     try {
-        await sequelize.sync({force: mudarBanco})
+        await sequelize.sync({force: false})
     } catch (error) {
         console.error("Erro ao sincronizar base de dados: ", error);
     }
