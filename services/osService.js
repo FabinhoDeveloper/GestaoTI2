@@ -97,10 +97,6 @@ module.exports = {
                 ]
             });
 
-            if (listaOs.length === 0) {
-                throw new Error("Nenhuma OS atribuída a este usuário");
-            }
-
             return listaOs;
 
         } catch (error) {

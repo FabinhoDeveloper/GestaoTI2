@@ -17,7 +17,6 @@ module.exports = {
             console.error("Erro ao cadastrar usuário!", error)
             throw error
         }
-
     },
 
     async listarUsuarios() {
@@ -101,6 +100,39 @@ module.exports = {
 
         } catch (error) {
             console.error("Erro ao deletar usuário!", error)
+            throw error
+        }
+    },
+    
+    async editarUsuario(dados) {
+        const {id, nome, email, senha, tipo, local_de_trabalho} = dados
+
+        try {
+            console.log("Tentando atualizar o usuário com ID:", id);
+
+            const [linhasAtualizadas] = await Usuario.update({
+                nome,
+                email,
+                senha,
+                tipo,
+                local_de_trabalho
+            }, {
+                where: {id}
+            })
+
+            const usuario = await Usuario.findOne({ where: { id } });
+            console.log("Usuário encontrado:", usuario);
+
+            console.log("Linhas Atualizadas:", linhasAtualizadas);
+
+            if (linhasAtualizadas === 0) {
+                throw new Error("Usuário não encontrado.");
+            } 
+
+            return { mensagem: "Usuário atualizado com sucesso!" };
+
+        } catch (error) {
+            console.error("Erro ao editar usuário!", error)
             throw error
         }
     }

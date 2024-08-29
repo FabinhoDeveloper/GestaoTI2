@@ -1,3 +1,4 @@
+const Usuario = require("../models/Usuario");
 const usuarioServices = require("../services/usuarioService")
 
 module.exports = {
@@ -35,6 +36,36 @@ module.exports = {
         }
     },
 
+    async editarUsuario(req, res) {
+        const { id } = req.params;
+        const { nome, email, senha, tipo, local_de_trabalho } = req.body;
+    
+        try {
+            // Chama a função do serviço
+            const resultado = await usuarioServices.editarUsuario({
+                id,
+                nome,
+                email,
+                senha,
+                tipo,
+                local_de_trabalho
+            });
+    
+            // Retorna a resposta com o status 200
+            res.status(200).json(resultado);
+    
+        } catch (error) {
+            // Tratamento específico para o erro de usuário não encontrado
+            if (error.message === "Usuário não encontrado.") {
+                return res.status(404).json({ mensagem: error.message });
+            }
+    
+            // Tratamento para outros erros
+            console.error("Erro ao editar usuário:", error);
+            res.status(500).json({ mensagem: "Erro interno do servidor." });
+        }
+    },
+    
     async listarUsuarios(req, res) {
         try {
             const usuarios = await usuarioServices.listarUsuarios()

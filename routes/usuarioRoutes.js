@@ -14,4 +14,6 @@ router.post("/cadastrar", usuarioControllers.cadastrarUsuario)
 
 router.delete("/deletar/:id", usuarioControllers.deletarUsuario)
 
+router.put("/editar/:id", usuarioControllers.editarUsuario)
+
 module.exports = router

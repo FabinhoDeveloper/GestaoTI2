@@ -36,7 +36,7 @@ module.exports = {
         try {
             const listaOs = await osService.listarOs();
     
-            if (!listaOs || listaOs.length === 0) {
+            if (listaOs.length === 0) {
                 return res.status(404).json({ mensagem: "Nenhuma OS encontrada." });
             }
     
