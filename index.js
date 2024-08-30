@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors())
 
 app.use(session({
-  secret: 'segredo-super-seguro',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {secure: false}
