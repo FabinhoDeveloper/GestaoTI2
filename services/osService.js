@@ -35,7 +35,7 @@ module.exports = {
                         model: Usuario,
                         as: 'tecnico', // Alias para o técnico
                         attributes: ['nome']
-                    }
+                    },
                 ]
             });
     
