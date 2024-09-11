@@ -14,7 +14,8 @@ const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(cors())
+app.use(cors());
+
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -31,7 +32,7 @@ app.use("/usuario", usuarioRoutes)
 app.use("/os", osRoutes)
 
 sync().then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0' ,() => {
       console.log("Servidor rodando na porta", PORT);
     });
 })
