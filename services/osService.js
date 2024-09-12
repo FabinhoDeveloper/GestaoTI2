@@ -153,7 +153,7 @@ module.exports = {
 
     async concluirOs(dados) {
         try {
-            const { id } = dados;
+            const { id, observacao } = dados;
 
             const os = await OS.findByPk(id);
 
@@ -166,6 +166,7 @@ module.exports = {
             }
             
             os.status_os = "CONCLUÍDA"
+            os.observacao = observacao
             os.data_fechamento = new Date()
             
             await os.save();

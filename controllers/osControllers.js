@@ -100,9 +100,10 @@ module.exports = {
 
     async concluirOs(req, res) {
         const {id} = req.params
+        const {observacao} = req.body
 
         try {
-            const osConcluida = await osService.concluirOs({id})
+            const osConcluida = await osService.concluirOs({id, observacao})
 
             if (!osConcluida) {
                 return res.status(404).json({mensagem: "Nenhuma OS encontrada com esse ID!"})

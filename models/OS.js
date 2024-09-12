@@ -3,7 +3,7 @@ const sequelize = require("../config/database");
 const Usuario = require("./Usuario");
 
 const OS = sequelize.define('OS', {
-    descricao: {
+      descricao: {
         type: DataTypes.TEXT,
         allowNull: false
       },
@@ -18,7 +18,11 @@ const OS = sequelize.define('OS', {
       data_fechamento: {
         type: DataTypes.DATE,
         allowNull: true, // Pode ser nulo se a OS não foi fechada
-    }
+    },
+    observacao: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
 }, {
     sequelize,
     modelName: 'OS',
