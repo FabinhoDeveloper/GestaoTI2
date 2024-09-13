@@ -4,14 +4,15 @@ const Usuario = require("../models/Usuario");
 module.exports = {
     async cadastrarOS(dados) {
         try {
-            const {descricao, id, tecnicoId} = dados
+            const {descricao, id, local_os, tecnicoId} = dados
 
             const osCriada = await OS.create({
                 descricao: descricao,
                 status_os: "PENDENTE",
                 data_criacao: new Date(),
                 usuarioId: id,
-                tecnicoId
+                tecnicoId,
+                local_os
             })
 
             return osCriada
@@ -36,7 +37,8 @@ module.exports = {
                         as: 'tecnico', // Alias para o técnico
                         attributes: ['nome']
                     },
-                ]
+                ],
+
             });
     
             return listaOs.length > 0 ? listaOs : [];
@@ -87,7 +89,7 @@ module.exports = {
                     {
                         model: Usuario,
                         as: 'usuario', // Alias para o requerente
-                        attributes: ['nome']
+                        attributes: ['nome', 'local_de_trabalho']
                     },
                     {
                         model: Usuario,

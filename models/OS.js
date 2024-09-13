@@ -23,6 +23,10 @@ const OS = sequelize.define('OS', {
       type: DataTypes.TEXT,
       allowNull: true
     },
+    local_os: {
+      type: DataTypes.STRING,
+      allowNull: false
+  }
 }, {
     sequelize,
     modelName: 'OS',

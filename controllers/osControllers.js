@@ -3,7 +3,7 @@ const osService = require("../services/osService")
 
 module.exports = {
     async cadastrarOs (req, res) {
-        const {descricao, id, tecnicoId} = req.body
+        const {descricao, local_os, id, tecnicoId} = req.body
         
         try {
             if (!descricao) {
@@ -18,7 +18,8 @@ module.exports = {
             const osCriada = await osService.cadastrarOS({
                 descricao, 
                 id,
-                tecnicoId
+                tecnicoId,
+                local_os
             })
             
             res.status(201).json({
