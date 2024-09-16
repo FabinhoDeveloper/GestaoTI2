@@ -3,7 +3,7 @@ const osService = require("../services/osService")
 
 module.exports = {
     async cadastrarOs (req, res) {
-        const {descricao, local_os, id, tecnicoId} = req.body
+        const {descricao, local_os, id, tecnicoId, prioridade} = req.body
         
         try {
             if (!descricao) {
@@ -19,7 +19,8 @@ module.exports = {
                 descricao, 
                 id,
                 tecnicoId,
-                local_os
+                local_os,
+                prioridade
             })
             
             res.status(201).json({
@@ -116,6 +117,35 @@ module.exports = {
             })
         } catch (error) {
             res.status(500).json({mensagem: error.message})
+        }
+    },
+
+    async editarOs(req, res) {
+        const { id } = req.params;
+        const {descricao, tecnicoId, prioridade, local_os} = req.body
+    
+        try {
+            // Chama a função do serviço
+            const resultado = await usuarioServices.editarOs({
+                id,
+                descricao,
+                tecnicoId,
+                prioridade,
+                local_os
+            });
+    
+            // Retorna a resposta com o status 200
+            res.status(200).json(resultado);
+    
+        } catch (error) {
+            // Tratamento específico para o erro de usuário não encontrado
+            if (error.message === "OS não encontrada.") {
+                return res.status(404).json({ mensagem: error.message });
+            }
+    
+            // Tratamento para outros erros
+            console.error("Erro ao editar OS:", error);
+            res.status(500).json({ mensagem: "Erro interno do servidor." });
         }
     },
 

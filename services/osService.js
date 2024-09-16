@@ -4,7 +4,7 @@ const Usuario = require("../models/Usuario");
 module.exports = {
     async cadastrarOS(dados) {
         try {
-            const {descricao, id, local_os, tecnicoId} = dados
+            const {descricao, id, local_os, tecnicoId, prioridade} = dados
 
             const osCriada = await OS.create({
                 descricao: descricao,
@@ -12,7 +12,8 @@ module.exports = {
                 data_criacao: new Date(),
                 usuarioId: id,
                 tecnicoId,
-                local_os
+                local_os,
+                prioridade
             })
 
             return osCriada
@@ -109,21 +110,34 @@ module.exports = {
 
     async obterOsPorId(dados) {
         try {
-            const {id} = dados
-
-            const os = await OS.findByPk(id)
-
+            const { id } = dados;
+    
+            const os = await OS.findByPk(id, {
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'usuario', // Alias para o requerente
+                        attributes: ['nome']
+                    },
+                    {
+                        model: Usuario,
+                        as: 'tecnico', // Alias para o técnico
+                        attributes: ['nome']
+                    }
+                ]
+            });
+    
             if (!os) {
                 throw new Error("Nenhuma OS encontrada com este ID!");
             }
-
-            return os
+    
+            return os;
         } catch (error) {
             console.error("Erro ao buscar OS por Id:", error.message);
             throw error;
         }
     },
-
+    
     async atribuirOs(dados) {
         try {
             const { idOs, idUsuario } = dados;
@@ -150,6 +164,38 @@ module.exports = {
         } catch (error) {
             console.error("Erro ao atribuir OS:", error.message);
             throw error;
+        }
+    },
+
+    async editarOs(dados) {
+        const {id, descricao, tecnicoId, prioridade, local_os} = dados
+
+        try {
+            console.log("Tentando atualizar a OS com ID:", id);
+
+            const [linhasAtualizadas] = await OS.update({
+                descricao,
+                tecnicoId,
+                prioridade,
+                local_os,
+            }, {
+                where: {id}
+            })
+
+            const os = await OS.findOne({ where: {id}});
+            console.log("Usuário encontrado:", os);
+
+            console.log("Linhas Atualizadas:", linhasAtualizadas);
+
+            if (linhasAtualizadas === 0) {
+                throw new Error("OS não encontrada.");
+            } 
+
+            return { mensagem: "OS atualizada com sucesso!" };
+
+        } catch (error) {
+            console.error("Erro ao editar OS!", error)
+            throw error
         }
     },
 

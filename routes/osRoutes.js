@@ -18,4 +18,6 @@ router.post("/cancelar/:id", osControllers.cancelarOs)
 
 router.post("/atribuir/:idOs", osControllers.atribuirOs)
 
+router.put("/editar/:id", osControllers.editarOs)
+
 module.exports = router

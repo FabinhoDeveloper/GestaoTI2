@@ -18,15 +18,19 @@ const OS = sequelize.define('OS', {
       data_fechamento: {
         type: DataTypes.DATE,
         allowNull: true, // Pode ser nulo se a OS não foi fechada
-    },
-    observacao: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    local_os: {
-      type: DataTypes.STRING,
-      allowNull: false
-  }
+      },
+      observacao: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      local_os: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      prioridade: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      }
 }, {
     sequelize,
     modelName: 'OS',
