@@ -123,10 +123,13 @@ module.exports = {
     async editarOs(req, res) {
         const { id } = req.params;
         const {descricao, tecnicoId, prioridade, local_os} = req.body
-    
+
         try {
+            if (!id) {
+                return res.status(404).json({mensagem: "Nenhuma OS encontrada com esse ID!"})
+            }
             // Chama a função do serviço
-            const resultado = await usuarioServices.editarOs({
+            const resultado = await osService.editarOs({
                 id,
                 descricao,
                 tecnicoId,
