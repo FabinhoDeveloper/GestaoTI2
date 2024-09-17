@@ -120,6 +120,25 @@ module.exports = {
         }
     },
 
+    async reabrirOs(req, res) {
+        const {id} = req.params
+
+        try {
+            const osReaberta = await osService.reabrirOs({id})
+
+            if (!osReaberta) {
+                return res.status(404).json({mensagem: "Nenhuma OS encontrada com esse ID!"})
+            }
+
+            res.json({
+                mensagem: "OS re-aberta com sucesso!",
+                os: osReaberta
+            })
+        } catch (error) {
+            res.status(500).json({mensagem: error.message})
+        }
+    },
+
     async editarOs(req, res) {
         const { id } = req.params;
         const {descricao, tecnicoId, prioridade, local_os} = req.body

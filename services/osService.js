@@ -39,7 +39,7 @@ module.exports = {
                         attributes: ['nome']
                     },
                 ],
-
+                order: [['data_criacao', 'ASC']],
             });
     
             return listaOs.length > 0 ? listaOs : [];
@@ -67,7 +67,8 @@ module.exports = {
                         as: 'tecnico', // Alias para o técnico
                         attributes: ['nome']
                     }
-                ]
+                ],
+                order: [['data_criacao', 'ASC']],
             });
     
             return listaOs; // Retorna a lista, mesmo que esteja vazia
@@ -97,7 +98,8 @@ module.exports = {
                         as: 'tecnico', // Alias para o técnico
                         attributes: ['nome']
                     }
-                ]
+                ],
+                order: [['data_criacao', 'ASC']],
             });
 
             return listaOs;
@@ -124,7 +126,8 @@ module.exports = {
                         as: 'tecnico', // Alias para o técnico
                         attributes: ['nome']
                     }
-                ]
+                ],
+                order: [['data_criacao', 'ASC']],
             });
     
             if (!os) {
@@ -217,6 +220,39 @@ module.exports = {
             os.observacao = observacao
             os.data_fechamento = new Date()
             
+            await os.save();
+
+            return os;
+        } catch (error) {
+            console.error("Erro ao concluir OS:", error.message);
+            throw error;
+        }
+    },
+
+    async reabrirOs(dados) {
+        try {
+            const { id } = dados;
+
+            const os = await OS.findByPk(id);
+
+            if (!os) {
+                throw new Error("Nenhuma OS encontrada com este ID!");
+            }
+
+
+            if (os.status_os === "PENDENTE") {
+                throw new Error("Essa OS está pendente! Não pôde ser re-aberta!");
+            }
+            
+            os.status_os = "PENDENTE"
+            
+            if (os.observacao) {
+                os.observacao == null
+            }
+
+            os.data_fechamento = null
+            os.data_criacao = new Date()
+
             await os.save();
 
             return os;

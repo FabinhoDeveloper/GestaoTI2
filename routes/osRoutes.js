@@ -14,6 +14,8 @@ router.post("/cadastrar", osControllers.cadastrarOs)
 
 router.post("/concluir/:id", osControllers.concluirOs)
 
+router.post("/reabrir/:id", osControllers.reabrirOs)
+
 router.post("/cancelar/:id", osControllers.cancelarOs)
 
 router.post("/atribuir/:idOs", osControllers.atribuirOs)
